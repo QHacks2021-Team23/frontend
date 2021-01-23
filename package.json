@@ -1,5 +1,5 @@
 {
-  "name": "with-polyfills",
+  "name": "frontend",
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
@@ -7,9 +7,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "antd": "4.10.3",
+    "draft-js": "0.11.7",
     "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "next-auth": "3.1.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-draft-wysiwyg": "1.14.5",
+    "sass": "1.32.5"
   },
   "license": "MIT"
 }
