@@ -1,39 +1,45 @@
-import { Button } from "antd";
-import { signin, signout, useSession } from "next-auth/client";
-import tinyMCE, { Editor } from "@tinymce/tinymce-react";
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
+import { Button } from "antd";
+import { signin, signout, useSession } from "next-auth/client";
+
+import { EditorState } from "draft-js";
+
+const Editor = dynamic(
+  () => {
+    return import("react-draft-wysiwyg").then((mod) => mod.Editor);
+  },
+  { ssr: false }
+);
+
 export default function Home() {
+  const [window, setWindow] = useState(null);
   const [session, loading] = useSession();
-  const [winH, setWinH] = useState(0);
   const [showComments, setShowComments] = useState(false);
+  const [commentsState, setCommentsState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
 
   useEffect(() => {
-    setWinH(window.innerHeight);
-  }, [winH]);
+    setWindow(document.window);
+  });
 
   const toggleComments = () => {
     setShowComments(!showComments);
   };
 
-  const handleEditorChange = (str, a) => {
-    const getMatches = (exp) => {
-      return Array.from(str.matchAll(exp)).map((i) =>
-        i[1].replaceAll(/(<[^>]+>)/g, "")
-      );
-    };
-
-    const headers = getMatches(/<h[1-6]>(.+)<\/h[1-6]>/g);
-    const paragraphs = getMatches(/<p>(.+)<\/p>/g);
-    paragraphs.forEach((i) => console.log(i));
-  };
-
-  const editorOptions = {
-    resize: false,
-    branding: false,
-    height: winH - 150,
-    menubar: false,
-    indent: false,
+  const handleEditorChange = (e) => {
+    setEditorState(e);
+    console.log(
+      e
+        .getCurrentContent()
+        .getBlocksAsArray()
+        .map((i) => i.getText())
+    );
   };
 
   return (
@@ -54,42 +60,59 @@ export default function Home() {
             <Button onClick={signout}>Sign out</Button>
           </div>
 
-          <div
-            className="editor"
-            style={{ gridTemplateColumns: `repeat(${1 + showComments}, 1fr)` }}
-          >
-            <Editor
-              apiKey={process.env.TINY_KEY}
-              initialValue=""
-              tagName="div"
-              init={{
-                ...editorOptions,
-                plugins: ["searchreplace paste wordcount"],
-                toolbar: "undo redo | bold italic backcolor | removeformat",
-              }}
-              onEditorChange={handleEditorChange}
-            />
-            {showComments && (
-              <div className="comments">
-                <Editor
-                  id="commentEditor"
-                  apiKey={process.env.TINY_KEY}
-                  initialValue="Content"
-                  init={{
-                    ...editorOptions,
-                    readonly: true,
-                    menubar: true,
-                    removed_menuitems: "file",
-                    plugins: [],
-                    toolbar: "help",
-                  }}
-                  onEditorChange={handleEditorChange}
-                />
-              </div>
-            )}
+          <div className="editor">
+            <div className="editorWrapper">
+              <Editor
+                autoCapitalize="sentences"
+                spellCheck={true}
+                editorState={editorState}
+                onEditorStateChange={handleEditorChange}
+                toolbar={toolbarOptions}
+              />
+            </div>
           </div>
         </>
       )}
     </div>
   );
 }
+
+const toolbarOptions = {
+  options: [
+    "blockType",
+    "fontSize",
+    "fontFamily",
+    "list",
+    "textAlign",
+    "history",
+  ],
+  blockType: {
+    inDropdown: true,
+    options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
+  },
+  fontSize: {
+    options: [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96],
+  },
+  fontFamily: {
+    options: [
+      "Arial",
+      "Georgia",
+      "Impact",
+      "Tahoma",
+      "Times New Roman",
+      "Verdana",
+    ],
+  },
+  list: {
+    inDropdown: false,
+    options: ["unordered", "ordered", "indent", "outdent"],
+  },
+  textAlign: {
+    inDropdown: false,
+    options: ["left", "center", "right", "justify"],
+  },
+  history: {
+    inDropdown: false,
+    options: ["undo", "redo"],
+  },
+};
