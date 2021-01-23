@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <meta charset="utf-8" />
+        <meta charSet="utf-8" />
       </Head>
       <Provider session={pageProps.session}>
         <Component {...pageProps} />
