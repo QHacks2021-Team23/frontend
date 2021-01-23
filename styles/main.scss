@@ -1,0 +1,29 @@
+.center {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.editor {
+  max-width: calc(100vw-4rem);
+  margin: 2rem 2rem 0;
+}
+
+div.DraftEditor-root {
+  border: 1px solid #eee;
+  max-width: calc(100vw-4rem);
+}
+
+div.DraftEditor-editorContainer,
+div.public-DraftEditor-content {
+  max-width: calc(100vw-4rem);
+  height: 70vh;
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overflow: hidden;
+  word-break: break-word;
+}
