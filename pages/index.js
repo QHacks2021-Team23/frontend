@@ -1,118 +1,95 @@
-import dynamic from "next/dynamic";
-import { useState, useEffect } from "react";
+import { providers, signIn } from "next-auth/client";
+import { useSession } from "next-auth/client";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
-import { Button } from "antd";
-import { signin, signout, useSession } from "next-auth/client";
+import { Card, Button, Divider, Input, Form, Alert } from "antd";
+import { GithubFilled, FacebookFilled } from "@ant-design/icons";
 
-import { EditorState } from "draft-js";
-
-const Editor = dynamic(
-  () => {
-    return import("react-draft-wysiwyg").then((mod) => mod.Editor);
-  },
-  { ssr: false }
-);
-
-export default function Home() {
-  const [window, setWindow] = useState(null);
+const SignIn = ({ providers }) => {
   const [session, loading] = useSession();
-  const [showComments, setShowComments] = useState(false);
-  const [commentsState, setCommentsState] = useState(() =>
-    EditorState.createEmpty()
-  );
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [badEmail, setBadEmail] = useState(false);
+  if (session && !loading) {
+    router.push("/editor");
+  }
 
-  useEffect(() => {
-    setWindow(document.window);
-  });
+  console.log(providers);
 
-  const toggleComments = () => {
-    setShowComments(!showComments);
+  const validateEmail = (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
   };
 
-  const handleEditorChange = (e) => {
-    setEditorState(e);
-    console.log(
-      e
-        .getCurrentContent()
-        .getBlocksAsArray()
-        .map((i) => i.getText())
-    );
+  const submitEmail = () => {
+    if (validateEmail(email)) {
+      signIn("email", { email: email });
+    }
   };
 
   return (
     <div className="center">
-      {!session && (
-        <>
-          <h1>Not signed in</h1>
+      <div className="content">
+        <h1>Welcome to Essay Editor Pro!</h1>
+        <p>Please use one of the following sign-in options to begin.</p>
+      </div>
+      <div className="card-wrapper">
+        <Card title="Log In">
           <div>
-            <Button onClick={signin}>Sign in</Button>
-          </div>
-        </>
-      )}
-      {session && (
-        <>
-          <h1> Signed in as {session.user.email} </h1>
-          <div>
-            <Button onClick={toggleComments}>Toggle Comments</Button>
-            <Button onClick={signout}>Sign out</Button>
-          </div>
-
-          <div className="editor">
-            <div className="editorWrapper">
-              <Editor
-                autoCapitalize="sentences"
-                spellCheck={true}
-                editorState={editorState}
-                onEditorStateChange={handleEditorChange}
-                toolbar={toolbarOptions}
+            <label className="input-wrapper">
+              <h3>Passwordless Sign In</h3>
+              <Alert
+                message="Please Use a Valid Email Address"
+                size="small"
+                type="error"
+                style={{ fontSize: "0.7rem" }}
               />
-            </div>
+              <Input
+                type="email"
+                defaultValue=""
+                placeholder="Email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                onPressEnter={submitEmail}
+              />
+            </label>
+            <Button
+              style={{ width: "200px" }}
+              type="primary"
+              onClick={submitEmail}
+            >
+              Passwordless Sign In
+            </Button>
           </div>
-        </>
-      )}
+          <Divider />
+          <Button
+            style={{ width: "200px", marginBottom: "1rem" }}
+            onClick={() => signIn("github")}
+            icon={<GithubFilled />}
+          >
+            Using Github
+          </Button>
+          <Button
+            style={{ width: "200px" }}
+            onClick={() => signIn("facebook")}
+            icon={<FacebookFilled />}
+          >
+            Using Facebook
+          </Button>
+        </Card>
+      </div>
     </div>
   );
-}
-
-const toolbarOptions = {
-  options: [
-    "blockType",
-    "fontSize",
-    "fontFamily",
-    "list",
-    "textAlign",
-    "history",
-  ],
-  blockType: {
-    inDropdown: true,
-    options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
-  },
-  fontSize: {
-    options: [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96],
-  },
-  fontFamily: {
-    options: [
-      "Arial",
-      "Georgia",
-      "Impact",
-      "Tahoma",
-      "Times New Roman",
-      "Verdana",
-    ],
-  },
-  list: {
-    inDropdown: false,
-    options: ["unordered", "ordered", "indent", "outdent"],
-  },
-  textAlign: {
-    inDropdown: false,
-    options: ["left", "center", "right", "justify"],
-  },
-  history: {
-    inDropdown: false,
-    options: ["undo", "redo"],
-  },
 };
+
+SignIn.getInitialProps = async (context) => {
+  console.log("fetch");
+  return {
+    providers: await providers(context),
+  };
+};
+
+export default SignIn;
