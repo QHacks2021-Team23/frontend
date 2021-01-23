@@ -21,12 +21,27 @@ export default function Editor() {
   const [commentsState, setCommentsState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [editorState, setEditorState] = useState(() =>
+  const [editorState, setEditorStateState] = useState(() =>
+    //TODO get state from backend
+    // and update with use effect
     EditorState.createEmpty()
   );
-
+  const [editorStateLength, setEditorStateLengthState] = useState(0);
   const toggleComments = () => {
     setShowComments(!showComments);
+  };
+
+  useEffect(() => {
+    //TODO update comments
+  }, [editorStateLength]);
+
+  const setEditorStateLength = (e) => {
+    setEditorStateLengthState(e.getCurrentContent().getBlocksAsArray().length);
+  };
+
+  const setEditorState = (e) => {
+    setEditorStateState(e);
+    setEditorStateLength(e);
   };
 
   const handleEditorChange = (e) => {
@@ -53,10 +68,14 @@ export default function Editor() {
       )}
       {session && (
         <>
-          <h1> Signed in as {session.user.email} </h1>
+          <h1>
+            {" "}
+            Signed in as {session.user.email} |{" "}
+            <Button onClick={signout}>Sign out</Button>
+          </h1>
           <div>
             <Button onClick={toggleComments}>Toggle Comments</Button>
-            <Button onClick={signout}>Sign out</Button>
+            <Button onClick={refreshComments}>Refresh Comments</Button>
           </div>
 
           <div className="editor">
