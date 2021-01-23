@@ -10,7 +10,7 @@ const SignIn = ({ providers }) => {
   const [session, loading] = useSession();
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [badEmail, setBadEmail] = useState(false);
+  const [validEmail, setValidEmail] = useState(true);
   if (session && !loading) {
     router.push("/editor");
   }
@@ -24,7 +24,10 @@ const SignIn = ({ providers }) => {
 
   const submitEmail = () => {
     if (validateEmail(email)) {
+      setValidEmail(false);
       signIn("email", { email: email });
+    } else {
+      setValidEmail(true);
     }
   };
 
@@ -40,9 +43,10 @@ const SignIn = ({ providers }) => {
             <label className="input-wrapper">
               <h3>Passwordless Sign In</h3>
               <Alert
-                message="Please Use a Valid Email Address"
+                message="Please use a Valid Email Address"
                 size="small"
                 type="error"
+                hidden={validEmail}
                 style={{ fontSize: "0.7rem" }}
               />
               <Input
