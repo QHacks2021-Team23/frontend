@@ -8,8 +8,6 @@ import { signin, signout, useSession } from "next-auth/client";
 
 import { EditorState } from "draft-js";
 
-import unescape from "lodash.unescape";
-
 import toolBarOptions from "../utils/toolbar";
 
 const DocumentEditor = dynamic(
@@ -22,12 +20,12 @@ const DocumentEditor = dynamic(
 export default function Editor() {
   const [session, loading] = useSession();
 
-  const [editorState, setEditorStateState] = useState(() =>
+  const [editorState, setEditorStateData] = useState(() =>
     //TODO get state from backend
     // and update with use effect
     EditorState.createEmpty()
   );
-  const [editorStateLength, setEditorStateLengthState] = useState(0);
+  const [editorStateLength, setEditorStateLengthData] = useState(0);
 
   const [showComments, setShowComments] = useState(false);
 
@@ -45,31 +43,26 @@ export default function Editor() {
 
   useEffect(() => {
     //TODO update comments
-    const state = editorState
-      .getCurrentContent()
-      .getBlocksAsArray()
-      .map((i) => {
-        return unescape(i.getText());
-      });
+    
   }, [editorStateLength]);
 
   const setEditorStateLength = (e) => {
-    setEditorStateLengthState(e.getCurrentContent().getBlocksAsArray().length);
+    setEditorStateLengthData(e.getCurrentContent().getBlocksAsArray().length);
   };
 
   const setEditorState = (e) => {
-    setEditorStateState(e);
+    setEditorStateData(e);
     setEditorStateLength(e);
   };
 
   const handleEditorChange = (e) => {
     setEditorState(e);
-    // console.log(
-    //   e
-    //     .getCurrentContent()
-    //     .getBlocksAsArray()
-    //     .map((i) => i.getText())
-    // );
+    console.log(
+      e
+        .getCurrentContent()
+        .getBlocksAsArray()
+        .map((i) => i.getText())
+    );
   };
 
   if (!loading && !session) {
