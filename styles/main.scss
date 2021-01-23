@@ -1,15 +1,33 @@
 .center {
   width: 100vw;
-  height: 100%;
+  margin: -5vh 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-content: center;
   text-align: center;
+  flex: auto;
+}
+
+.content {
+  margin-bottom: 3rem;
 }
 
 .editor {
   max-width: calc(100vw-4rem);
   margin: 2rem 2rem 0;
+}
+
+.card-wrapper {
+  width: 250px;
+  max-height: 300px;
+  align-self: center;
+}
+
+.input-wrapper {
+  display: block;
+  margin-bottom: 1rem;
 }
 
 div.DraftEditor-root {
