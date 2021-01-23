@@ -24,10 +24,10 @@ const SignIn = ({ providers }) => {
 
   const submitEmail = () => {
     if (validateEmail(email)) {
-      setValidEmail(false);
+      setValidEmail(true);
       signIn("email", { email: email });
     } else {
-      setValidEmail(true);
+      setValidEmail(false);
     }
   };
 
@@ -42,13 +42,14 @@ const SignIn = ({ providers }) => {
           <div>
             <label className="input-wrapper">
               <h3>Passwordless Sign In</h3>
-              <Alert
-                message="Please use a Valid Email Address"
-                size="small"
-                type="error"
-                hidden={validEmail}
-                style={{ fontSize: "0.7rem" }}
-              />
+              <span hidden={validEmail}>
+                <Alert
+                  message="Please use a Valid Email Address"
+                  size="small"
+                  type="error"
+                  style={{ fontSize: "0.7rem" }}
+                />
+              </span>
               <Input
                 type="email"
                 defaultValue=""
