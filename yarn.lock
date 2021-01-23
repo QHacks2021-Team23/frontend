@@ -65,7 +65,7 @@
   resolved "https://registry.yarnpkg.com/@ant-design/icons-svg/-/icons-svg-4.1.0.tgz#480b025f4b20ef7fe8f47d4a4846e4fee84ea06c"
   integrity sha512-Fi03PfuUqRs76aI3UWYpP864lkrfPo0hluwGqh7NJdLhvH4iRDc3jbJqZIvRDLHKbXrvAfPPV3+zjUccfFvWOQ==
 
-"@ant-design/icons@^4.3.0":
+"@ant-design/icons@4.4.0", "@ant-design/icons@^4.3.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@ant-design/icons/-/icons-4.4.0.tgz#d4e4ba5910454e1d3f67a802d2aad9ee75a51dea"
   integrity sha512-+X44IouK56JbP3r7zM+Zoykv5wQlXBlxY0NTaFXGpiyYSS/Bh6HIo9aTF62QkSuDTqA3UpeNVTRFioKKRmkWDQ==
@@ -3013,7 +3013,7 @@ node-releases@^1.1.65:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.70.tgz#66e0ed0273aa65666d7fe78febe7634875426a08"
   integrity sha512-Slf2s69+2/uAD79pVVQo8uSiC34+g8GWY8UH2Qtqv34ZfhYrxpYpfzs9Js9d6O0mbDmALuxaTlplnBTnSELcrw==
 
-nodemailer@^6.4.6:
+nodemailer@6.4.17, nodemailer@^6.4.6:
   version "6.4.17"
   resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.4.17.tgz#8de98618028953b80680775770f937243a7d7877"
   integrity sha512-89ps+SBGpo0D4Bi5ZrxcrCiRFaMmkCt+gItMXQGzEtZVR3uAD3QAQIDoxTWnx3ky0Dwwy/dhFrQ+6NNGXpw/qQ==
@@ -4107,7 +4107,7 @@ sass-loader@10.0.5:
     schema-utils "^3.0.0"
     semver "^7.3.2"
 
-sass@^1.32.5:
+sass@1.32.5:
   version "1.32.5"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.32.5.tgz#2882d22ad5748c05fa9bff6c3b0ffbc4f4b9e1dc"
   integrity sha512-kU1yJ5zUAmPxr7f3q0YXTAd1oZjSR1g3tYyv+xu0HZSl5JiNOaE987eiz7wCUvbm4I9fGWGU2TgApTtcP4GMNQ==
