@@ -1,13 +1,42 @@
+:root {
+  --editor: calc(90vh - 7rem);
+}
+
 .center {
   width: 100vw;
-  margin: -5vh 0;
+  margin: -3vh 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   text-align: center;
   flex: auto;
+}
+
+.bottom {
+  justify-items: flex-end;
+}
+
+.vertical-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.title {
+  color: black;
+  margin: 5rem 0 0 2rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.session {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1rem;
 }
 
 .content {
@@ -16,7 +45,7 @@
 
 .editor {
   max-width: calc(100vw-4rem);
-  margin: 2rem 2rem 0;
+  margin: 0rem 2rem 0;
 }
 
 .card-wrapper {
@@ -38,10 +67,14 @@ div.DraftEditor-root {
 div.DraftEditor-editorContainer,
 div.public-DraftEditor-content {
   max-width: calc(100vw-4rem);
-  height: 70vh;
+  height: var(--editor);
   padding: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
   overflow: hidden;
   word-break: break-word;
+}
+
+div.public-DraftEditor-content {
+  height: calc(var(--editor)-2rem);
 }
