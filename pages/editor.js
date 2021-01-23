@@ -8,6 +8,8 @@ import { signin, signout, useSession } from "next-auth/client";
 
 import { EditorState } from "draft-js";
 
+import unescape from "lodash.unescape";
+
 const DocumentEditor = dynamic(
   () => {
     return import("react-draft-wysiwyg").then((mod) => mod.Editor);
@@ -33,6 +35,12 @@ export default function Editor() {
 
   useEffect(() => {
     //TODO update comments
+    const state = editorState
+      .getCurrentContent()
+      .getBlocksAsArray()
+      .map((i) => {
+        return unescape(i.getText());
+      });
   }, [editorStateLength]);
 
   const setEditorStateLength = (e) => {
