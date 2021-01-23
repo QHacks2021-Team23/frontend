@@ -1,5 +1,6 @@
 :root {
   --editor: calc(90vh - 7rem);
+  --width: calc(100vw - 4rem);
 }
 
 .center {
@@ -61,20 +62,18 @@
 
 div.DraftEditor-root {
   border: 1px solid #eee;
-  max-width: calc(100vw-4rem);
+  width: var(--width);
 }
 
 div.DraftEditor-editorContainer,
 div.public-DraftEditor-content {
-  max-width: calc(100vw-4rem);
+  width: calc(var(--width) - 2rem);
   height: var(--editor);
   padding: 1rem;
-  overflow-y: auto;
-  overflow-x: hidden;
   overflow: hidden;
   word-break: break-word;
 }
 
 div.public-DraftEditor-content {
-  height: calc(var(--editor)-2rem);
+  padding-bottom: 3rem;
 }
