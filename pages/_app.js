@@ -1,9 +1,22 @@
-// Add your polyfills here or at the component level.
-// For example...
-// import 'resize-observer-polyfill'
+import { Provider } from "next-auth/client";
+import Head from "next/head";
+
+import "antd/dist/antd.min.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+import "../styles/main.scss";
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Head>
+        <meta charset="utf-8" />
+      </Head>
+      <Provider session={pageProps.session}>
+        <Component {...pageProps} />
+      </Provider>
+    </>
+  );
 }
 
-export default MyApp
+export default MyApp;
