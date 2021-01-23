@@ -3,7 +3,6 @@ FROM node:lts-alpine AS deps
 
 WORKDIR /opt/app
 COPY package.json yarn.lock ./
-ENV YARN_CACHE_FOLDER=/dev/shm/yarn_cache
 RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
@@ -25,7 +24,6 @@ ARG X_TAG
 WORKDIR /opt/app
 ENV NODE_ENV=production
 COPY --from=builder /opt/app/next.config.js ./
-COPY --from=builder /opt/app/public ./public
 COPY --from=builder /opt/app/.next ./.next
 COPY --from=builder /opt/app/node_modules ./node_modules
 CMD ["node_modules/.bin/next", "start"]
