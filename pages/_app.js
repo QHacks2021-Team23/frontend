@@ -7,6 +7,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "../styles/main.scss";
 
 function MyApp({ Component, pageProps }) {
+  console.log(process.env.DATABASE_URL);
   return (
     <>
       <Head>

@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const { oldData, email } = req.body;
   const data = timeout(
     120000,
-    fetch("http://localhost:5000/", {
+    fetch(process.env.BACKEND_URL, {
       method: "POST",
       mode: "no-cors",
       body: JSON.stringify(oldData),
