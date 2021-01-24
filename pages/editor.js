@@ -10,6 +10,8 @@ import { EditorState } from "draft-js";
 
 import toolBarOptions from "../utils/toolbar";
 
+import fetch from "cross-fetch";
+
 const DocumentEditor = dynamic(
   () => {
     return import("react-draft-wysiwyg").then((mod) => mod.Editor);
@@ -20,12 +22,11 @@ const DocumentEditor = dynamic(
 export default function Editor() {
   const [session, loading] = useSession();
 
-  const [editorState, setEditorStateData] = useState(() =>
+  const [editorState, setEditorState] = useState(() =>
     //TODO get state from backend
     // and update with use effect
     EditorState.createEmpty()
   );
-  const [editorStateLength, setEditorStateLengthData] = useState(0);
 
   const [showComments, setShowComments] = useState(false);
 
@@ -38,32 +39,35 @@ export default function Editor() {
   };
 
   const refreshComments = async () => {
+    console.log(
+      "run",
+      editorState?.getCurrentContent()?.getBlocksAsArray()?.length
+    );
     // TODO get comments from API
+    if (editorState?.getCurrentContent()?.getBlocksAsArray()?.length) {
+      const data = await JSON.stringify(
+        editorState
+          .getCurrentContent()
+          .getBlocksAsArray()
+          .map((i) => i.getText())
+      );
+      fetch("http://localhost:5000/", {
+        method: "POST",
+        mode: "no-cors",
+        body: data
+      })
+        .then((res) => res.json())
+        .then(console.log);
+
+      //   fetch("http://localhost:5000/hello", {})
+      //     .then((res) => res.json())
+      //     .then((res) => console.log(res));
+    }
   };
 
   useEffect(() => {
     //TODO update comments
-    
-  }, [editorStateLength]);
-
-  const setEditorStateLength = (e) => {
-    setEditorStateLengthData(e.getCurrentContent().getBlocksAsArray().length);
-  };
-
-  const setEditorState = (e) => {
-    setEditorStateData(e);
-    setEditorStateLength(e);
-  };
-
-  const handleEditorChange = (e) => {
-    setEditorState(e);
-    console.log(
-      e
-        .getCurrentContent()
-        .getBlocksAsArray()
-        .map((i) => i.getText())
-    );
-  };
+  }, [editorState]);
 
   if (!loading && !session) {
     signin();
@@ -96,7 +100,7 @@ export default function Editor() {
                 autoCapitalize="sentences"
                 spellCheck={true}
                 editorState={editorState}
-                onEditorStateChange={handleEditorChange}
+                onEditorStateChange={setEditorState}
                 toolbar={toolBarOptions}
                 toolbarCustomButtons={[
                   <Button onClick={toggleComments}>Toggle Comments</Button>,
