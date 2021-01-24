@@ -30,8 +30,9 @@ const SignIn = ({ providers }) => {
   };
 
   return (
-    <div className="center">
+    <div className="center login">
       <div className="content">
+        <img src="/logo.jpg" alt="Logo" className="logo" />
         <h1>Welcome to Essay Editor Pro!</h1>
         <p>Please use one of the following sign-in options to begin.</p>
       </div>
